@@ -4,11 +4,13 @@
 
 Highlights:
 
-- 🚀 Tech stack: Next.js & TypeScript, Stream, Convex, Clerk
+- 🚀 Tech stack: Next.js & TypeScript, Stream, Convex, Clerk, OpenAI
 - 🎥 Video Calls
 - 🖥️ Screen Sharing
 - 🎬 Screen Recording
 - 🔒 Authentication & Authorization
+- 🤖 AI-Powered Problem Generation
+- 📚 Problem Library Management
 - 💻 Server Components, Layouts, Server Actions
 - 🎭 Client & Server Components
 - 🛣️ Dynamic & Static Routes
@@ -26,6 +28,7 @@ CONVEX_DEPLOYMENT=
 NEXT_PUBLIC_CONVEX_URL=
 NEXT_PUBLIC_STREAM_API_KEY=
 STREAM_SECRET_KEY=
+OPENAI_API_KEY=  # Required for AI problem generation
 ```
 
 ### Important: Clerk JWT Template Setup
@@ -45,6 +48,33 @@ STREAM_SECRET_KEY=
 - Go to your [Convex Dashboard](https://dashboard.convex.dev)
 - Navigate to Settings → Environment Variables
 - Add the Clerk JWT Signing Key as an environment variable (Convex will automatically use it)
+
+### OpenAI API Setup (for AI Problem Generation)
+
+1. Get your OpenAI API key from [OpenAI Platform](https://platform.openai.com/api-keys)
+2. Add it to your Convex environment variables:
+   - Go to [Convex Dashboard](https://dashboard.convex.dev) → Settings → Environment Variables
+   - Add `OPENAI_API_KEY` with your API key value
+3. The AI problem generation feature will use `gpt-4o-mini` model (cost-effective)
+
+### New Features
+
+#### 🤖 AI Problem Generation
+- Generate coding problems automatically using AI
+- Customize difficulty (Easy, Medium, Hard)
+- Specify category and topics
+- Problems include examples, constraints, starter code, and hints
+
+#### 📚 Problem Library
+- Manage your coding problems
+- View all problems you've created
+- Delete problems you no longer need
+- Filter by difficulty and category
+
+#### 🎯 Interview Problem Assignment
+- Assign problems to interviews when scheduling
+- Select multiple problems per interview
+- Problems are linked to interviews for easy access during the interview
 
 ### Run the app
 

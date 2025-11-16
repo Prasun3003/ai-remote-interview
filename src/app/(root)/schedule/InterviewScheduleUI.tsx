@@ -26,6 +26,8 @@ import { Loader2Icon, XIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { TIME_SLOTS } from "@/constants";
 import MeetingCard from "@/components/MeetingCard";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 function InterviewScheduleUI() {
   const client = useStreamVideoClient();
@@ -35,6 +37,7 @@ function InterviewScheduleUI() {
 
   const interviews = useQuery(api.interviews.getAllInterviews) ?? [];
   const users = useQuery(api.users.getUsers) ?? [];
+  const problems = useQuery(api.problems.getMyProblems) ?? [];
   const createInterview = useMutation(api.interviews.createInterview);
 
   const candidates = users?.filter((u) => u.role === "candidate");
@@ -47,6 +50,7 @@ function InterviewScheduleUI() {
     time: "09:00",
     candidateId: "",
     interviewerIds: user?.id ? [user.id] : [],
+    problemIds: [] as string[],
   });
 
   const scheduleMeeting = async () => {
@@ -85,6 +89,10 @@ function InterviewScheduleUI() {
         streamCallId: id,
         candidateId,
         interviewerIds,
+        problemIds:
+          formData.problemIds.length > 0
+            ? (formData.problemIds as any)
+            : undefined,
       });
 
       setOpen(false);
@@ -97,6 +105,7 @@ function InterviewScheduleUI() {
         time: "09:00",
         candidateId: "",
         interviewerIds: user?.id ? [user.id] : [],
+        problemIds: [],
       });
     } catch (error) {
       console.error(error);
@@ -228,6 +237,73 @@ function InterviewScheduleUI() {
                     </SelectContent>
                   </Select>
                 )}
+              </div>
+
+              {/* PROBLEMS */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Coding Problems (Optional)</label>
+                <div className="space-y-2">
+                  {problems.length === 0 ? (
+                    <div className="text-sm text-muted-foreground p-4 border rounded-md">
+                      No problems available.{" "}
+                      <Link
+                        href="/problems"
+                        className="text-primary hover:underline"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpen(false);
+                        }}
+                      >
+                        Create some problems first
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="space-y-2 max-h-48 overflow-y-auto border rounded-md p-3">
+                      {problems.map((problem) => (
+                        <div
+                          key={problem._id}
+                          className="flex items-start gap-2 p-2 rounded hover:bg-accent cursor-pointer"
+                          onClick={() => {
+                            if (formData.problemIds.includes(problem._id)) {
+                              setFormData({
+                                ...formData,
+                                problemIds: formData.problemIds.filter((id) => id !== problem._id),
+                              });
+                            } else {
+                              setFormData({
+                                ...formData,
+                                problemIds: [...formData.problemIds, problem._id],
+                              });
+                            }
+                          }}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={formData.problemIds.includes(problem._id)}
+                            onChange={() => {}}
+                            className="mt-1"
+                          />
+                          <div className="flex-1">
+                            <div className="font-medium text-sm">{problem.title}</div>
+                            <div className="text-xs text-muted-foreground line-clamp-1">
+                              {problem.description}
+                            </div>
+                            <div className="flex gap-1 mt-1">
+                              <Badge variant="outline" className="text-xs">
+                                {problem.difficulty}
+                              </Badge>
+                              {problem.category && (
+                                <Badge variant="outline" className="text-xs">
+                                  {problem.category}
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* DATE & TIME */}

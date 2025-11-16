@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "convex": "^1.18.2"
+  },
+  "environmentVariables": {
+    "OPENAI_API_KEY": {
+      "description": "Your OpenAI API key for generating coding problems",
+      "required": true
+    }
+  }
+}

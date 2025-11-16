@@ -31,6 +31,9 @@ export default function Home() {
         setModalType("join");
         setShowModal(true);
         break;
+      case "Problems":
+        router.push("/problems");
+        break;
       default:
         router.push(`/${title.toLowerCase()}`);
     }

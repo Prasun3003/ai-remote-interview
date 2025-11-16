@@ -27,6 +27,8 @@ export const TIME_SLOTS = [
   "17:00",
 ];
 
+import { BookOpen } from "lucide-react";
+
 export const QUICK_ACTIONS = [
   {
     icon: Code2,
@@ -48,6 +50,13 @@ export const QUICK_ACTIONS = [
     description: "Plan upcoming interviews",
     color: "blue-500",
     gradient: "from-blue-500/10 via-blue-500/5 to-transparent",
+  },
+  {
+    icon: BookOpen,
+    title: "Problems",
+    description: "Manage coding problems",
+    color: "indigo-500",
+    gradient: "from-indigo-500/10 via-indigo-500/5 to-transparent",
   },
   {
     icon: Clock,

@@ -45,14 +45,35 @@ export const createInterview = mutation({
     streamCallId: v.string(),
     candidateId: v.string(),
     interviewerIds: v.array(v.string()),
+    problemIds: v.optional(v.array(v.id("problems"))),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Unauthorized");
 
-    return await ctx.db.insert("interviews", {
-      ...args,
+    const interviewId = await ctx.db.insert("interviews", {
+      title: args.title,
+      description: args.description,
+      startTime: args.startTime,
+      status: args.status,
+      streamCallId: args.streamCallId,
+      candidateId: args.candidateId,
+      interviewerIds: args.interviewerIds,
     });
+
+    // Link problems to interview if provided
+    if (args.problemIds && args.problemIds.length > 0) {
+      for (let i = 0; i < args.problemIds.length; i++) {
+        await ctx.db.insert("interviewProblems", {
+          interviewId,
+          problemId: args.problemIds[i],
+          order: i,
+          assignedAt: Date.now(),
+        });
+      }
+    }
+
+    return interviewId;
   },
 });
 

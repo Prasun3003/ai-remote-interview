@@ -29,4 +29,42 @@ export default defineSchema({
     interviewerId: v.string(),
     interviewId: v.id("interviews"),
   }).index("by_interview_id", ["interviewId"]),
+
+  problems: defineTable({
+    title: v.string(),
+    description: v.string(),
+    difficulty: v.union(v.literal("easy"), v.literal("medium"), v.literal("hard")),
+    category: v.optional(v.string()), // e.g., "arrays", "strings", "dynamic-programming"
+    tags: v.optional(v.array(v.string())),
+    examples: v.array(
+      v.object({
+        input: v.string(),
+        output: v.string(),
+        explanation: v.optional(v.string()),
+      })
+    ),
+    starterCode: v.object({
+      javascript: v.string(),
+      python: v.string(),
+      java: v.string(),
+    }),
+    constraints: v.optional(v.array(v.string())),
+    hints: v.optional(v.array(v.string())), // AI-generated hints
+    createdBy: v.string(), // clerkId of creator
+    isAIGenerated: v.boolean(),
+    aiPrompt: v.optional(v.string()), // Store the prompt used to generate
+    createdAt: v.number(),
+  })
+    .index("by_creator", ["createdBy"])
+    .index("by_difficulty", ["difficulty"])
+    .index("by_category", ["category"]),
+
+  interviewProblems: defineTable({
+    interviewId: v.id("interviews"),
+    problemId: v.id("problems"),
+    order: v.number(), // Order in which problems appear
+    assignedAt: v.number(),
+  })
+    .index("by_interview", ["interviewId"])
+    .index("by_problem", ["problemId"]),
 });
